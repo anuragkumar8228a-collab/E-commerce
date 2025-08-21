@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tik Tac Toe</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <h2>Tik Tac Toe</h2>
+    <div class="winner">
+        <p class="player">winner : </p>
+        <button class="newGame">New Game</button>
+    </div>
+    <div class="container">
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+
+        <button class="box"></button>
+        <button class="box"></button>
+        <button class="box"></button>
+    </div>
+
+
+    <!-- Footer -->
+
+
+    <footer class="form">
+        <form action="hello">
+            <table>
+                <tr>
+                    <td>Your's Feedback</td>
+                    <td> <input type="text"></td>
+                </tr>
+                <tr>
+                    <td> <button type="submit"><a href="Index.html"> Submit</a></button></td>
+                </tr>
+            </table>
+        </form>
+    </footer>
+</body>
+<script>
+    const items = document.querySelectorAll('.box');
+    const player1 = "O";
+    const player2 = "X";
+    let turn = true;
+    const playerwin = document.querySelector('.player');
+    const newGame = document.querySelector('.newGame');
+    const winner = document.querySelector('.winner');
+    let count = 0;
+
+    const winPatterns = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    const checkWinner = () => {
+        for (let pattern of winPatterns) {
+            let pos1Val = items[pattern[0]].innerText;
+            let pos2Val = items[pattern[1]].innerText;
+            let pos3Val = items[pattern[2]].innerText;
+
+            if (pos1Val != "" && pos2Val != "" && pos3Val != "") {
+                if (pos1Val == pos2Val && pos2Val == pos3Val) {
+                    console.log('winner', pos1Val);
+                    showWinner(pos1Val);
+                    return;
+                }
+            }
+        }
+
+        if (count === 9) {
+            playerwin.innerText = `Game Draw`;
+            winner.style.visibility = 'visible';
+        }
+    };
+
+    const disableBoxes = () => {
+        for (let box of items) {
+            box.disabled = true;
+        }
+    };
+
+    const enableBoxes = () => {
+        for (let box of items) {
+            box.disabled = false;
+            box.innerText = "";
+            winner.style.visibility = 'hidden';
+        }
+    };
+
+    const showWinner = (pos1Val) => {
+        playerwin.innerText = `Winner : player ${pos1Val}`;
+        winner.style.visibility = 'visible';
+        disableBoxes();
+    };
+
+    items.forEach(box => {
+        box.addEventListener("click", () => {
+            if (box.innerText === "") {
+                if (turn) {
+                    box.innerHTML = player1;
+                    turn = false;
+                    box.style.color = "green";
+                } else {
+                    box.innerHTML = player2;
+                    turn = true;
+                    box.style.color = "red";
+                }
+                box.disabled = true;
+                count++;
+                checkWinner();
+            }
+        });
+    });
+
+    newGame.addEventListener('click', () => {
+        turn = true;
+        count = 0;
+        enableBoxes();
+    });
+
+</script>
+
+</html>
